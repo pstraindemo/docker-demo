@@ -1,21 +1,17 @@
-# runtime
-FROM python:3.8-slim
+FROM python:3.7-alpine
 
-# set the working directory in the container
-WORKDIR /app
+WORKDIR /code
 
-# copy the current directory into the container at /app
-COPY . /app/
-
-# install needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# make port 80 available outside the container
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=80
+ENV CUSTOM_HEADER='Test WebApp'
+ENV BG_COLOR=white
+ENV FONT_COLOR=black
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+RUN apk add --no-cache curl
 EXPOSE 80
-
-# define environment variables
-ENV NAME world
-
-# Run app.py 
-CMD ["python", "app.py"]
-
+COPY . .
+CMD ["flask", "run"]

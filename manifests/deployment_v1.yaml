@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: test-webapp
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-webapp
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: test-webapp
+        tier: frontend
+    spec:
+      containers:
+      - name: webapp-test-container
+        image: pstraindemo/webapp-test-k8s
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
